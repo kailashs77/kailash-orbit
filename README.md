@@ -23,9 +23,10 @@ Then open http://localhost:8000. Opening `index.html` directly from disk won't w
 - `js/interactions.js`: the pointer "interaction grammar" (letter rolls, button fills, row wipes, media tilt)
 - `js/motion.js`: shared easing tokens and text helpers; the CSS custom properties mirror them
 - `js/marquee.js`, `js/cursor.js`, `js/ui.js`: smaller pieces
-- `vendor/`: GSAP 3.12.5, ScrollTrigger and Lenis 1.1.13, served from this repo (sources and checksums in `vendor/README.md`)
+- `vendor/`: GSAP 3.12.5, ScrollTrigger, Lenis 1.1.13 and Matter.js 0.19.0 (sources and checksums in `vendor/README.md`)
+- `fonts/`: self-hosted Archivo and JetBrains Mono, with their licences (see `fonts/README.md`)
 
-Matter.js 0.19.0 is the only library still loaded from jsDelivr, and only when the "Let's talk." drop is clicked. If any library fails to load, the page still shows everything, just without that motion.
+Everything the page needs is served from this repo; the only outside request is the optional live Codeforces rating. If a library fails to load, the page still shows everything, just without that motion.
 
 ## Motion and accessibility
 

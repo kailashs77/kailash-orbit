@@ -1,2 +1,3 @@
 # Keep vendored libraries byte-identical to the official releases (no line-ending conversion).
 vendor/*.js -text
+*.woff2 binary

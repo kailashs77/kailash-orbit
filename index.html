@@ -21,9 +21,9 @@
     setTimeout(function () { if (!d.classList.contains('motion-ready')) d.classList.remove('motion'); }, 1800);
   })(document.documentElement);
 </script>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Archivo:ital,wdth,wght@0,62..125,100..900;1,62..125,100..900&amp;family=JetBrains+Mono:wght@400;500&amp;display=swap" rel="stylesheet">
+<!-- fonts are self-hosted (see fonts/README.md); the two used above the fold load first -->
+<link rel="preload" as="font" type="font/woff2" href="fonts/archivo-latin.woff2" crossorigin>
+<link rel="preload" as="font" type="font/woff2" href="fonts/jetbrains-mono-latin.woff2" crossorigin>
 <link rel="stylesheet" href="css/style.css">
 <link rel="preload" as="image" href="assets/portrait.jpg">
 <!-- fetch the whole module graph in parallel instead of discovering it one import at a time -->

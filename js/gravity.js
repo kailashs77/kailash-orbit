@@ -2,7 +2,7 @@
    Before the drop they lean away from a nearby cursor, hinting that they can move.
    With a mouse they can be dragged and thrown; "Put it back" reassembles the word. */
 
-const MATTER_SRC = 'https://cdn.jsdelivr.net/npm/matter-js@0.19.0/build/matter.min.js';
+const MATTER_SRC = 'vendor/matter.min.js'; // resolved against the page URL; see vendor/README.md
 const STEP = 1000 / 60;
 const IDLE_LABEL = 'Click to drop ↓';
 
