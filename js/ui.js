@@ -12,13 +12,32 @@ export function fitText(el, { maxSize } = {}) {
   el.style.setProperty('--fit-size', `${(size * 0.995).toFixed(2)}px`);
 }
 
-// Header colour follows whichever section sits under it; it hides while scrolling down.
+// Header: colour follows the section underneath, a soft backdrop fades in once scrolled,
+// it tucks away while scrolling down, and a single line slides to the active or hovered link.
 export function initHeader(lenis) {
   const head = document.getElementById('head');
-  const links = [...head.querySelectorAll('.head-nav a')];
+  const nav = head.querySelector('.head-nav');
+  const links = [...nav.querySelectorAll('a')];
   let base = 'light';
   let override = null;
+  let active = null;
+  let hovered = null;
   const apply = () => { head.dataset.theme = override || base; };
+
+  const moveLine = () => {
+    const a = hovered || active;
+    if (!a) { nav.classList.remove('has-line'); return; }
+    const label = a.querySelector('.roll') || a;
+    const nr = nav.getBoundingClientRect();
+    const lr = label.getBoundingClientRect();
+    nav.style.setProperty('--nx', `${(lr.left - nr.left).toFixed(1)}px`);
+    nav.style.setProperty('--nw', lr.width.toFixed(1));
+    nav.classList.add('has-line');
+  };
+  links.forEach((a) => {
+    a.addEventListener('pointerenter', () => { hovered = a; moveLine(); });
+    a.addEventListener('pointerleave', () => { hovered = null; moveLine(); });
+  });
 
   const themeObs = new IntersectionObserver((entries) => {
     for (const en of entries) if (en.isIntersecting) { base = en.target.dataset.theme; apply(); }
@@ -28,16 +47,19 @@ export function initHeader(lenis) {
   const activeObs = new IntersectionObserver((entries) => {
     for (const en of entries) {
       if (!en.isIntersecting) continue;
-      links.forEach((a) => a.classList.toggle('is-active', a.getAttribute('href') === `#${en.target.id}`));
+      active = links.find((a) => a.getAttribute('href') === `#${en.target.id}`) || null;
+      links.forEach((a) => a.classList.toggle('is-active', a === active));
+      moveLine();
     }
   }, { rootMargin: '-45% 0px -50% 0px' });
-  links.forEach((a) => {
-    const section = document.querySelector(a.getAttribute('href'));
-    if (section) activeObs.observe(section);
-  });
+  document.querySelectorAll('main > section').forEach((s) => activeObs.observe(s));
+  addEventListener('resize', moveLine);
 
+  // The soft backdrop only appears once the hero (and its planet transition) has scrolled away.
+  const about = document.getElementById('about');
   let lastY = window.scrollY;
   const onScroll = (y) => {
+    head.classList.toggle('is-scrolled', about.getBoundingClientRect().top < head.offsetHeight);
     if (y > lastY + 4 && y > window.innerHeight * 1.6) head.classList.add('is-hidden');
     else if (y < lastY - 4) head.classList.remove('is-hidden');
     lastY = y;
@@ -51,11 +73,12 @@ export function initHeader(lenis) {
 export function initMenu(lenis) {
   const root = document.documentElement;
   const btn = document.querySelector('.menu-btn');
+  const label = btn.querySelector('.btn-label');
   const nav = document.getElementById('nav');
   const set = (open) => {
     root.classList.toggle('menu-open', open);
     btn.setAttribute('aria-expanded', String(open));
-    btn.textContent = open ? 'Close' : 'Menu';
+    label.textContent = open ? 'Close' : 'Menu';
     document.body.style.overflow = open ? 'hidden' : '';
     if (lenis) (open ? lenis.stop() : lenis.start());
   };
@@ -67,7 +90,11 @@ export function initMenu(lenis) {
   matchMedia('(min-width: 861px)').addEventListener('change', (e) => { if (e.matches) set(false); });
 }
 
-// In-page links scroll smoothly (or instantly with reduced motion) and move focus for keyboard users.
+// easeInOutQuint: a slow lift-off, a quick flight, and a long, soft landing
+const glide = (t) => (t < 0.5 ? 16 * t ** 5 : 1 - (-2 * t + 2) ** 5 / 2);
+
+// In-page links scroll smoothly (instantly with reduced motion), taking longer for longer trips,
+// and move focus to the destination for keyboard and screen-reader users.
 export function initAnchors(lenis, reduce) {
   document.addEventListener('click', (e) => {
     const a = e.target.closest('a[href^="#"]');
@@ -76,10 +103,14 @@ export function initAnchors(lenis, reduce) {
     const target = id === '#top' ? null : document.querySelector(id);
     if (id !== '#top' && !target) return;
     e.preventDefault();
-    const offset = -document.getElementById('head').offsetHeight;
-    if (lenis) lenis.scrollTo(target || 0, { offset: target ? offset : 0, duration: 1.6 });
-    else if (target) window.scrollTo({ top: target.getBoundingClientRect().top + window.scrollY + offset, behavior: reduce ? 'auto' : 'smooth' });
-    else window.scrollTo({ top: 0, behavior: reduce ? 'auto' : 'smooth' });
+    const offset = target ? -document.getElementById('head').offsetHeight : 0;
+    const y = target ? target.getBoundingClientRect().top + window.scrollY + offset : 0;
+    if (lenis) {
+      const duration = Math.min(2.4, Math.max(1, Math.abs(y - window.scrollY) / 2400));
+      lenis.scrollTo(y, { duration, easing: glide });
+    } else {
+      window.scrollTo({ top: y, behavior: reduce ? 'auto' : 'smooth' });
+    }
     const focusEl = target || document.getElementById('main');
     focusEl.setAttribute('tabindex', '-1');
     focusEl.focus({ preventScroll: true });
@@ -91,8 +122,15 @@ export function initClock() {
   const year = document.getElementById('year');
   if (year) year.textContent = new Date().getFullYear();
   if (!el) return;
-  const fmt = new Intl.DateTimeFormat('en-GB', { timeZone: 'Asia/Kolkata', hour: '2-digit', minute: '2-digit' });
-  const tick = () => { el.textContent = fmt.format(new Date()); };
+  const fmt = new Intl.DateTimeFormat('en-GB', { timeZone: 'Asia/Kolkata', hour: '2-digit', minute: '2-digit', hourCycle: 'h23' });
+  const colon = document.createElement('span');
+  colon.className = 'colon';
+  colon.textContent = ':';
+  const tick = () => {
+    const parts = fmt.formatToParts(new Date());
+    const part = (type) => (parts.find((p) => p.type === type) || { value: '--' }).value;
+    el.replaceChildren(part('hour'), colon, part('minute'));
+  };
   tick();
   setInterval(tick, 15000);
 }
@@ -102,7 +140,7 @@ export function initCopy() {
     const label = btn.querySelector('.copy-label');
     btn.addEventListener('click', () => {
       const done = (ok) => {
-        label.textContent = ok ? 'Copied!' : btn.dataset.copy;
+        label.textContent = ok ? 'Copied ✓' : btn.dataset.copy;
         btn.classList.toggle('is-done', ok);
         setTimeout(() => { label.textContent = 'Copy email'; btn.classList.remove('is-done'); }, 1800);
       };

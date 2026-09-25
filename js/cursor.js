@@ -1,4 +1,5 @@
-/* A trailing dot that turns into a label over anything with data-cursor. Mouse only. */
+/* A trailing dot that becomes a label over anything with data-cursor. Mouse only.
+   It recolours itself for the section underneath (amber on dark, ink on amber and bone). */
 
 export function initCursor() {
   const root = document.documentElement;
@@ -7,6 +8,7 @@ export function initCursor() {
   let x = -100; let y = -100; let tx = -100; let ty = -100;
   let raf = 0;
   let current = null;
+  let world = 'light';
   root.classList.add('has-cursor');
 
   const loop = () => {
@@ -17,14 +19,18 @@ export function initCursor() {
   };
 
   const update = (target) => {
-    const holder = target instanceof Element ? target.closest('[data-cursor]') : null;
+    const el = target instanceof Element ? target : null;
+    const holder = el ? el.closest('[data-cursor]') : null;
     const text = holder ? holder.dataset.cursor : '';
     if (text !== current) {
       current = text;
       if (text) label.textContent = text;
       cursor.classList.toggle('is-label', Boolean(text));
     }
-    cursor.classList.toggle('is-hot', !text && target instanceof Element && Boolean(target.closest('a, button')));
+    cursor.classList.toggle('is-hot', !text && Boolean(el && el.closest('a, button')));
+    const zone = el ? el.closest('[data-theme]') : null;
+    const next = zone ? zone.dataset.theme : 'light';
+    if (next !== world) { world = next; cursor.dataset.world = next; }
   };
 
   addEventListener('pointermove', (e) => {
@@ -36,19 +42,16 @@ export function initCursor() {
     update(e.target); // also catches labels that change while hovering (e.g. after the drop)
     if (!raf) raf = requestAnimationFrame(loop);
   }, { passive: true });
-  root.addEventListener('mouseleave', () => cursor.classList.add('is-off'));
-}
 
-// Buttons drift a few pixels toward the pointer and spring back on leave.
-export function initMagnetic() {
-  document.querySelectorAll('.magnetic').forEach((el) => {
-    el.addEventListener('pointermove', (e) => {
-      if (e.pointerType !== 'mouse') return;
-      const r = el.getBoundingClientRect();
-      const dx = (e.clientX - (r.left + r.width / 2)) * 0.22;
-      const dy = (e.clientY - (r.top + r.height / 2)) * 0.32;
-      el.style.translate = `${dx.toFixed(1)}px ${dy.toFixed(1)}px`;
-    });
-    el.addEventListener('pointerleave', () => { el.style.translate = ''; });
-  });
+  // Content scrolls under a still pointer, so re-check what it's over once per frame while scrolling.
+  let checking = false;
+  addEventListener('scroll', () => {
+    if (checking || tx < 0) return;
+    checking = true;
+    requestAnimationFrame(() => { checking = false; update(document.elementFromPoint(tx, ty)); });
+  }, { passive: true });
+
+  addEventListener('pointerdown', (e) => { if (e.pointerType === 'mouse') cursor.classList.add('is-down'); });
+  addEventListener('pointerup', () => cursor.classList.remove('is-down'));
+  root.addEventListener('mouseleave', () => cursor.classList.add('is-off'));
 }

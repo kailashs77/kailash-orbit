@@ -1,4 +1,5 @@
 /* "Let's talk." — click and the letters drop under real physics (Matter.js, loaded on demand).
+   Before the drop they lean away from a nearby cursor, hinting that they can move.
    With a mouse they can be dragged and thrown; "Put it back" reassembles the word. */
 
 const MATTER_SRC = 'https://cdn.jsdelivr.net/npm/matter-js@0.19.0/build/matter.min.js';
@@ -9,6 +10,7 @@ export function initGravity({ reduce, fine }) {
   const stage = document.getElementById('grav-stage');
   const btn = document.getElementById('drop-btn');
   if (!stage || !btn) return;
+  const btnLabel = btn.querySelector('.btn-label') || btn;
   if (reduce) {
     btn.hidden = true;
     stage.removeAttribute('data-cursor');
@@ -25,6 +27,7 @@ export function initGravity({ reduce, fine }) {
   let lastT = 0;
   let inView = true;
 
+  const setLabel = (text) => { btnLabel.textContent = text; };
   const load = () => (window.Matter ? Promise.resolve() : new Promise((resolve, reject) => {
     const s = document.createElement('script');
     s.src = MATTER_SRC;
@@ -34,13 +37,59 @@ export function initGravity({ reduce, fine }) {
     document.head.appendChild(s);
   }));
 
+  // ---- lean: letters near the pointer lift and tilt away from it, springing back when it leaves
+  const lean = letters.map(() => ({ y: 0, r: 0 }));
+  let px = 0;
+  let py = 0;
+  let near = false;
+  let leanRaf = 0;
+  const leanFrame = () => {
+    leanRaf = 0;
+    if (mode !== 'idle') return;
+    const reach = stage.offsetHeight * 0.55;
+    let moving = false;
+    letters.forEach((el, i) => {
+      const cx = el.offsetLeft + el.offsetWidth / 2; // layout position, unaffected by transforms
+      const cy = el.offsetTop + el.offsetHeight / 2;
+      const dx = px - cx;
+      const f = near ? Math.max(0, 1 - Math.hypot(dx, py - cy) / reach) : 0;
+      const ty = -f * f * 18;
+      const tr = f * f * (dx > 0 ? -4 : 4);
+      const o = lean[i];
+      o.y += (ty - o.y) * 0.16;
+      o.r += (tr - o.r) * 0.16;
+      el.style.transform = Math.abs(o.y) < 0.01 && Math.abs(o.r) < 0.01 ? '' : `translate3d(0, ${o.y.toFixed(2)}px, 0) rotate(${o.r.toFixed(2)}deg)`;
+      if (Math.abs(ty - o.y) > 0.05 || Math.abs(tr - o.r) > 0.02) moving = true;
+    });
+    if (moving || near) leanRaf = requestAnimationFrame(leanFrame);
+  };
+  const resetLean = () => {
+    cancelAnimationFrame(leanRaf);
+    leanRaf = 0;
+    lean.forEach((o) => { o.y = 0; o.r = 0; });
+    letters.forEach((el) => { el.style.transform = ''; });
+  };
+  if (fine) {
+    stage.addEventListener('pointermove', (e) => {
+      if (mode !== 'idle' || e.pointerType !== 'mouse') return;
+      const r = stage.getBoundingClientRect();
+      px = e.clientX - r.left;
+      py = e.clientY - r.top;
+      near = true;
+      if (!leanRaf) leanRaf = requestAnimationFrame(leanFrame);
+    });
+    stage.addEventListener('pointerleave', () => { near = false; });
+  }
+
+  // ---- drop
   async function drop() {
     if (mode !== 'idle') return;
     mode = 'loading';
-    btn.textContent = 'Loading…';
+    resetLean();
+    setLabel('Loading…');
     try { await load(); } catch {
       mode = 'idle';
-      btn.textContent = IDLE_LABEL;
+      setLabel(IDLE_LABEL);
       return;
     }
     const { Engine, Bodies, Body, Composite, Mouse, MouseConstraint } = window.Matter;
@@ -60,7 +109,7 @@ export function initGravity({ reduce, fine }) {
     bodies = letters.map((el) => {
       const r = el.getBoundingClientRect();
       const ch = el.textContent;
-      let x0 = r.left - sr.left + r.width / 2;
+      const x0 = r.left - sr.left + r.width / 2;
       let y0 = r.top - sr.top + r.height / 2;
       // glyphs fill ~94% of their box width and ~87% of the 0.8em line box height
       let w = Math.max(r.width * 0.94, 8);
@@ -97,7 +146,7 @@ export function initGravity({ reduce, fine }) {
     mode = 'live';
     stage.classList.add('is-dropped');
     stage.dataset.cursor = 'Drag the letters';
-    btn.textContent = 'Put it back ↺';
+    setLabel('Put it back ↺');
     wake();
   }
 
@@ -144,7 +193,7 @@ export function initGravity({ reduce, fine }) {
       mode = 'idle';
       stage.classList.remove('is-dropped');
       stage.dataset.cursor = IDLE_LABEL;
-      btn.textContent = IDLE_LABEL;
+      setLabel(IDLE_LABEL);
     }, 1400);
   }
 

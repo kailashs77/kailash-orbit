@@ -40,13 +40,14 @@
 <header class="head" id="head" data-theme="light">
   <a class="mark" href="#top" aria-label="Kailash S, back to top">kailash<i>.</i></a>
   <nav class="head-nav" id="nav" aria-label="Primary">
-    <a href="#about"><span>01</span>About</a>
-    <a href="#orbit"><span>02</span>Orbit</a>
-    <a href="#work"><span>03</span>Work</a>
-    <a href="#contact"><span>04</span>Contact</a>
+    <a href="#about" style="--i:0"><span class="num" aria-hidden="true">01</span><span class="roll" data-roll>About</span></a>
+    <a href="#orbit" style="--i:1"><span class="num" aria-hidden="true">02</span><span class="roll" data-roll>Orbit</span></a>
+    <a href="#work" style="--i:2"><span class="num" aria-hidden="true">03</span><span class="roll" data-roll>Work</span></a>
+    <a href="#contact" style="--i:3"><span class="num" aria-hidden="true">04</span><span class="roll" data-roll>Contact</span></a>
+    <span class="nav-line" aria-hidden="true"></span>
   </nav>
-  <a class="head-cta magnetic" href="mailto:kailashsg77@gmail.com">Say hello</a>
-  <button class="menu-btn" type="button" aria-expanded="false" aria-controls="nav">Menu</button>
+  <a class="btn btn--sm head-cta magnetic" href="mailto:kailashsg77@gmail.com"><span class="dot" aria-hidden="true"></span><span class="btn-label">Say hello</span></a>
+  <button class="btn btn--sm menu-btn" type="button" aria-expanded="false" aria-controls="nav"><span class="btn-label">Menu</span></button>
 </header>
 
 <main id="main">
@@ -58,7 +59,7 @@
       <svg class="rings rings--back" aria-hidden="true"></svg>
       <div class="planet-wrap">
         <figure class="planet" id="planet">
-          <img src="assets/portrait.jpg" alt="Black-and-white portrait of Kailash S in profile, mid-sentence" width="900" height="900" fetchpriority="high">
+          <img src="assets/portrait.jpg" alt="Black-and-white portrait of Kailash S in profile, mid-sentence" width="900" height="900" fetchpriority="high" decoding="async">
           <span class="planet-core" aria-hidden="true"></span>
         </figure>
       </div>
@@ -80,11 +81,12 @@
     <h1 class="hero-name" aria-label="Kailash S"><span class="fit" aria-hidden="true">Kailash</span></h1>
 
     <div class="hero-foot">
-      <span>Chennai, IN · <span id="clock">--:--</span> IST</span>
+      <span>Chennai, IN · <span class="clock" id="clock">--:--</span> IST</span>
       <span class="scroll-hint">Scroll <i aria-hidden="true"></i></span>
     </div>
 
     <div class="bigbang" aria-hidden="true"></div>
+    <div class="bigbang-ring" aria-hidden="true"></div>
   </div>
 </section>
 
@@ -92,7 +94,7 @@
 <section class="about" id="about" data-theme="amber">
   <div class="wrap">
     <div class="about-top">
-      <p class="eyebrow">(01) About</p>
+      <p class="eyebrow" data-scramble>(01) About</p>
       <p class="about-line" data-reveal>I like understanding how software fits together end to end.</p>
     </div>
     <h2 class="mega reveal-lines">
@@ -103,7 +105,7 @@
     <div class="about-grid">
       <p class="statement" id="statement">So I'm learning by doing: <em>building with my teammates</em>, picking up <em>DevOps</em> at an internship, and spending time on <em>security</em> with CYSCOM.</p>
       <aside class="edu" data-reveal aria-label="Education">
-        <p class="eyebrow">Education</p>
+        <p class="eyebrow" data-scramble>Education</p>
         <h3>VIT Chennai</h3>
         <p class="edu-full">Vellore Institute of Technology, Chennai</p>
         <p class="edu-deg">Computer Science &amp; Engineering <span aria-hidden="true">·</span> 2nd year</p>
@@ -118,7 +120,7 @@
 <section class="orbit" id="orbit" data-theme="light">
   <div class="wrap">
     <header class="sec-head">
-      <p class="eyebrow">(02) In my orbit</p>
+      <p class="eyebrow" data-scramble>(02) In my orbit</p>
       <h2 class="sec-title reveal-lines"><span class="line"><span>What I'm involved in</span></span><span class="line"><span><em>right now.</em></span></span></h2>
       <p class="sec-sub" data-reveal>Two roles and two team projects, all ongoing.</p>
     </header>
@@ -167,7 +169,7 @@
 <section class="work" id="work" data-theme="light">
   <div class="wrap">
     <header class="sec-head">
-      <p class="eyebrow">(03) Team projects</p>
+      <p class="eyebrow" data-scramble>(03) Team projects</p>
       <h2 class="sec-title reveal-lines"><span class="line"><span>Built with my</span></span><span class="line"><span><em>college teammates.</em></span></span></h2>
       <p class="sec-sub" data-reveal>What they are, and where I fit in.</p>
     </header>
@@ -185,28 +187,37 @@
         </div>
         <ul class="stack" aria-label="Project stack"><li>Python</li><li>FastAPI</li><li>React</li><li>TypeScript</li><li>MapLibre</li></ul>
         <p class="case-links">
-          <a class="btn btn--amber magnetic" href="https://github.com/JaydonJP/RESQ" target="_blank" rel="noopener" data-cursor="Open ↗">Team repository <span aria-hidden="true">↗</span></a>
-          <a class="btn btn--line magnetic" href="https://github.com/JaydonJP/RESQ/pull/1" target="_blank" rel="noopener" data-cursor="Open ↗">My pull request <span aria-hidden="true">↗</span></a>
+          <a class="btn btn--primary magnetic" href="https://github.com/JaydonJP/RESQ" target="_blank" rel="noopener"><span class="btn-label">Team repository</span><span class="btn-icon" aria-hidden="true"><i>↗</i><i>↗</i></span></a>
+          <a class="btn magnetic" href="https://github.com/JaydonJP/RESQ/pull/1" target="_blank" rel="noopener"><span class="btn-label">My pull request</span><span class="btn-icon" aria-hidden="true"><i>↗</i><i>↗</i></span></a>
         </p>
       </div>
 
-      <div class="case-visual" id="resq-visual" aria-hidden="true">
+      <div class="case-visual" id="resq-visual" data-reveal-media data-tilt aria-hidden="true">
         <svg viewBox="0 0 800 600" preserveAspectRatio="xMidYMid slice">
-          <path class="river" d="M-20 548 C200 520 300 590 520 548 S760 505 820 528"/>
-          <g class="roads-minor"><path d="M-20 205 L820 195 M-20 385 L820 395 M270 -20 L280 620 M520 -20 L525 620 M720 300 L820 360 M-20 40 L420 30"/></g>
-          <g class="roads-major"><path d="M-20 120 L820 100 M-20 300 L820 290 M-20 470 L820 490 M150 -20 L170 620 M400 -20 L390 620 M640 -20 L660 620 M40 620 L520 -20"/></g>
-          <path class="route-usual" d="M165 474 L656 486 L653 390 L650 292 L644 104"/>
-          <g class="queue"><circle cx="655" cy="452" r="4"/><circle cx="655" cy="438" r="4"/><circle cx="654" cy="424" r="4"/><circle cx="654" cy="410" r="4"/></g>
-          <g class="incident"><circle cx="653" cy="390" r="12"/><path d="M646 383 L660 397 M660 383 L646 397"/></g>
-          <path class="route-resq" id="resq-route" pathLength="1" d="M165 474 L160 298 L395 295 L398 110 L644 104"/>
-          <circle class="sig is-green" cx="160" cy="298" r="8"/>
-          <circle class="sig is-green" cx="395" cy="295" r="8"/>
-          <circle class="sig is-green" cx="398" cy="110" r="8"/>
-          <circle class="base" cx="165" cy="474" r="8"/>
-          <g class="hospital"><rect x="632" y="92" width="24" height="24" rx="5"/><path d="M644 97 V111 M637 104 H651"/></g>
-          <text class="map-label" x="182" y="500">dispatch</text>
-          <text class="map-label" x="600" y="80">hospital</text>
-          <g class="amb" id="amb"><circle class="amb-halo" r="16"/><circle class="amb-dot" r="7"/></g>
+          <g class="layer" style="--depth:4">
+            <path class="river" d="M-20 548 C200 520 300 590 520 548 S760 505 820 528"/>
+            <g class="roads-minor"><path d="M-20 205 L820 195 M-20 385 L820 395 M270 -20 L280 620 M520 -20 L525 620 M720 300 L820 360 M-20 40 L420 30"/></g>
+            <g class="roads-major"><path d="M-20 120 L820 100 M-20 300 L820 290 M-20 470 L820 490 M150 -20 L170 620 M400 -20 L390 620 M640 -20 L660 620 M40 620 L520 -20"/></g>
+          </g>
+          <g class="layer" style="--depth:10">
+            <path class="route-usual" d="M165 474 L656 486 L653 390 L650 292 L644 104"/>
+            <g class="queue"><circle cx="655" cy="452" r="4"/><circle cx="655" cy="438" r="4"/><circle cx="654" cy="424" r="4"/><circle cx="654" cy="410" r="4"/></g>
+            <g class="incident"><circle cx="653" cy="390" r="12"/><path d="M646 383 L660 397 M660 383 L646 397"/></g>
+            <path class="route-resq" id="resq-route" pathLength="1" d="M165 474 L160 298 L395 295 L398 110 L644 104"/>
+            <path class="route-trail" id="resq-trail" pathLength="1" d="M165 474 L160 298 L395 295 L398 110 L644 104"/>
+            <circle class="sig-ring" cx="160" cy="298" r="8"/>
+            <circle class="sig-ring" cx="395" cy="295" r="8"/>
+            <circle class="sig-ring" cx="398" cy="110" r="8"/>
+            <circle class="sig is-green" cx="160" cy="298" r="8"/>
+            <circle class="sig is-green" cx="395" cy="295" r="8"/>
+            <circle class="sig is-green" cx="398" cy="110" r="8"/>
+            <circle class="base" cx="165" cy="474" r="8"/>
+            <circle class="arrive-ring" cx="644" cy="104" r="14"/>
+            <g class="hospital"><rect x="632" y="92" width="24" height="24" rx="5"/><path d="M644 97 V111 M637 104 H651"/></g>
+            <text class="map-label" x="182" y="500">dispatch</text>
+            <text class="map-label" x="600" y="80">hospital</text>
+            <g class="amb" id="amb"><circle class="amb-halo" r="16"/><circle class="amb-dot" r="7"/></g>
+          </g>
         </svg>
         <div class="readout"><span id="ro-state">Corridor cleared</span><span>Signal 01 <b class="ro-sig is-green">green</b></span><span>Signal 02 <b class="ro-sig is-green">green</b></span><span>Signal 03 <b class="ro-sig is-green">green</b></span></div>
         <div class="legend"><span class="lg lg--usual">usual route</span><span class="lg lg--resq">RESQ route</span></div>
@@ -217,17 +228,21 @@
 
   <article class="case case--ipms" id="ipms">
     <div class="wrap case-inner">
-      <div class="case-visual case-visual--schema" id="ipms-visual" aria-hidden="true">
+      <div class="case-visual case-visual--schema" id="ipms-visual" data-reveal-media data-tilt aria-hidden="true">
         <svg viewBox="0 0 800 600" preserveAspectRatio="xMidYMid meet">
-          <g class="rels">
-            <path pathLength="1" d="M300 250 C400 250 400 120 500 120"/>
-            <path pathLength="1" d="M300 310 C400 310 400 452 500 452"/>
-            <path pathLength="1" d="M400 440 C400 404 190 424 190 380"/>
+          <g class="layer" style="--depth:5">
+            <g class="rels">
+              <path pathLength="1" d="M300 250 C400 250 400 120 500 120"/>
+              <path pathLength="1" d="M300 310 C400 310 400 452 500 452"/>
+              <path pathLength="1" d="M400 440 C400 404 190 424 190 380"/>
+            </g>
           </g>
-          <g class="tbl" data-dx="-90" data-dy="40" data-r="-8" transform="translate(80 190)"><rect class="tbl-box" width="220" height="190" rx="14"/><path class="tbl-head" d="M0 14a14 14 0 0 1 14-14h192a14 14 0 0 1 14 14v22H0z"/><rect class="tbl-key" x="18" y="56" width="16" height="9" rx="4.5"/><rect class="tbl-row" x="44" y="56" width="120" height="9" rx="4.5"/><rect class="tbl-row" x="18" y="86" width="150" height="9" rx="4.5"/><rect class="tbl-row" x="18" y="116" width="110" height="9" rx="4.5"/><rect class="tbl-row" x="18" y="146" width="136" height="9" rx="4.5"/></g>
-          <g class="tbl" data-dx="80" data-dy="-60" data-r="7" transform="translate(500 60)"><rect class="tbl-box" width="220" height="150" rx="14"/><path class="tbl-head" d="M0 14a14 14 0 0 1 14-14h192a14 14 0 0 1 14 14v22H0z"/><rect class="tbl-key" x="18" y="56" width="16" height="9" rx="4.5"/><rect class="tbl-row" x="44" y="56" width="104" height="9" rx="4.5"/><rect class="tbl-row" x="18" y="86" width="140" height="9" rx="4.5"/><rect class="tbl-row" x="18" y="116" width="96" height="9" rx="4.5"/></g>
-          <g class="tbl" data-dx="100" data-dy="70" data-r="-6" transform="translate(500 380)"><rect class="tbl-box" width="220" height="150" rx="14"/><path class="tbl-head" d="M0 14a14 14 0 0 1 14-14h192a14 14 0 0 1 14 14v22H0z"/><rect class="tbl-key" x="18" y="56" width="16" height="9" rx="4.5"/><rect class="tbl-row" x="44" y="56" width="128" height="9" rx="4.5"/><rect class="tbl-row" x="18" y="86" width="116" height="9" rx="4.5"/><rect class="tbl-row" x="18" y="116" width="150" height="9" rx="4.5"/></g>
-          <g class="tbl" data-dx="-70" data-dy="90" data-r="9" transform="translate(330 440)"><rect class="tbl-box" width="140" height="110" rx="14"/><path class="tbl-head" d="M0 14a14 14 0 0 1 14-14h112a14 14 0 0 1 14 14v22H0z"/><rect class="tbl-key" x="18" y="56" width="16" height="9" rx="4.5"/><rect class="tbl-row" x="44" y="56" width="70" height="9" rx="4.5"/><rect class="tbl-row" x="18" y="80" width="90" height="9" rx="4.5"/></g>
+          <g class="layer" style="--depth:11">
+            <g class="tbl" data-dx="-90" data-dy="40" data-r="-8" transform="translate(80 190)"><rect class="tbl-box" width="220" height="190" rx="14"/><path class="tbl-head" d="M0 14a14 14 0 0 1 14-14h192a14 14 0 0 1 14 14v22H0z"/><rect class="tbl-key" x="18" y="56" width="16" height="9" rx="4.5"/><rect class="tbl-row" x="44" y="56" width="120" height="9" rx="4.5"/><rect class="tbl-row" x="18" y="86" width="150" height="9" rx="4.5"/><rect class="tbl-row" x="18" y="116" width="110" height="9" rx="4.5"/><rect class="tbl-row" x="18" y="146" width="136" height="9" rx="4.5"/></g>
+            <g class="tbl" data-dx="80" data-dy="-60" data-r="7" transform="translate(500 60)"><rect class="tbl-box" width="220" height="150" rx="14"/><path class="tbl-head" d="M0 14a14 14 0 0 1 14-14h192a14 14 0 0 1 14 14v22H0z"/><rect class="tbl-key" x="18" y="56" width="16" height="9" rx="4.5"/><rect class="tbl-row" x="44" y="56" width="104" height="9" rx="4.5"/><rect class="tbl-row" x="18" y="86" width="140" height="9" rx="4.5"/><rect class="tbl-row" x="18" y="116" width="96" height="9" rx="4.5"/></g>
+            <g class="tbl" data-dx="100" data-dy="70" data-r="-6" transform="translate(500 380)"><rect class="tbl-box" width="220" height="150" rx="14"/><path class="tbl-head" d="M0 14a14 14 0 0 1 14-14h192a14 14 0 0 1 14 14v22H0z"/><rect class="tbl-key" x="18" y="56" width="16" height="9" rx="4.5"/><rect class="tbl-row" x="44" y="56" width="128" height="9" rx="4.5"/><rect class="tbl-row" x="18" y="86" width="116" height="9" rx="4.5"/><rect class="tbl-row" x="18" y="116" width="150" height="9" rx="4.5"/></g>
+            <g class="tbl" data-dx="-70" data-dy="90" data-r="9" transform="translate(330 440)"><rect class="tbl-box" width="140" height="110" rx="14"/><path class="tbl-head" d="M0 14a14 14 0 0 1 14-14h112a14 14 0 0 1 14 14v22H0z"/><rect class="tbl-key" x="18" y="56" width="16" height="9" rx="4.5"/><rect class="tbl-row" x="44" y="56" width="70" height="9" rx="4.5"/><rect class="tbl-row" x="18" y="80" width="90" height="9" rx="4.5"/></g>
+          </g>
         </svg>
         <span class="illus">illustration</span>
       </div>
@@ -257,25 +272,25 @@
 <section class="more" id="more" data-theme="dark">
   <div class="wrap more-grid">
     <div class="practice" data-reveal>
-      <p class="eyebrow">Practice</p>
+      <p class="eyebrow" data-scramble>Practice</p>
       <h2 class="more-title">Problem-solving, most nights.</h2>
       <p class="more-lede">Less about the rating, more about the habit of thinking in edge cases.</p>
       <p class="cf" id="cf-rating"></p>
       <ul class="plinks">
-        <li><a href="https://github.com/kailashs77/Leetcode" target="_blank" rel="noopener" data-cursor="Open ↗"><span class="pl-name">Leetcode</span><span class="pl-note">Solved problems, kept as a running record · C++, Python</span><span class="pl-arr" aria-hidden="true">↗</span></a></li>
-        <li><a href="https://codeforces.com/profile/Kailash77" target="_blank" rel="noopener" data-cursor="Open ↗"><span class="pl-name">Codeforces</span><span class="pl-note">Kailash77</span><span class="pl-arr" aria-hidden="true">↗</span></a></li>
-        <li><a href="https://www.codechef.com/users/quiver_rats_54" target="_blank" rel="noopener" data-cursor="Open ↗"><span class="pl-name">CodeChef</span><span class="pl-note">quiver_rats_54</span><span class="pl-arr" aria-hidden="true">↗</span></a></li>
-        <li><a href="https://github.com/kailashs77" target="_blank" rel="noopener" data-cursor="Open ↗"><span class="pl-name">Everything else</span><span class="pl-note">github.com/kailashs77</span><span class="pl-arr" aria-hidden="true">↗</span></a></li>
+        <li><a href="https://github.com/kailashs77/Leetcode" target="_blank" rel="noopener"><span class="pl-name">Leetcode</span><span class="pl-note">Solved problems, kept as a running record · C++, Python</span><span class="pl-arr" aria-hidden="true">→</span></a></li>
+        <li><a href="https://codeforces.com/profile/Kailash77" target="_blank" rel="noopener"><span class="pl-name">Codeforces</span><span class="pl-note">Kailash77</span><span class="pl-arr" aria-hidden="true">→</span></a></li>
+        <li><a href="https://www.codechef.com/users/quiver_rats_54" target="_blank" rel="noopener"><span class="pl-name">CodeChef</span><span class="pl-note">quiver_rats_54</span><span class="pl-arr" aria-hidden="true">→</span></a></li>
+        <li><a href="https://github.com/kailashs77" target="_blank" rel="noopener"><span class="pl-name">Everything else</span><span class="pl-note">github.com/kailashs77</span><span class="pl-arr" aria-hidden="true">→</span></a></li>
       </ul>
     </div>
     <div class="learning" data-reveal>
-      <p class="eyebrow">Learning now — and where</p>
+      <p class="eyebrow" data-scramble>Learning now — and where</p>
       <ul class="learn">
         <li><span class="l-what">DevOps fundamentals</span><span class="l-line" aria-hidden="true"></span><span class="l-where">Zapsters internship</span></li>
         <li><span class="l-what">Cybersecurity</span><span class="l-line" aria-hidden="true"></span><span class="l-where">CYSCOM @ VIT Chennai</span></li>
         <li><span class="l-what">Database design</span><span class="l-line" aria-hidden="true"></span><span class="l-where">Placement system project</span></li>
       </ul>
-      <p class="eyebrow">Curious about</p>
+      <p class="eyebrow" data-scramble>Curious about</p>
       <p class="curious">Software &amp; system design <span aria-hidden="true">·</span> how language models are built</p>
     </div>
   </div>
@@ -285,8 +300,8 @@
 <section class="contact" id="contact" data-theme="light">
   <div class="wrap">
     <div class="contact-top">
-      <p class="eyebrow">(04) Contact</p>
-      <button class="drop-btn magnetic" id="drop-btn" type="button">Click to drop ↓</button>
+      <p class="eyebrow" data-scramble>(04) Contact</p>
+      <button class="btn btn--sm drop-btn magnetic" id="drop-btn" type="button"><span class="btn-label">Click to drop ↓</span></button>
     </div>
     <div class="grav-stage" id="grav-stage" data-cursor="Click to drop ↓">
       <h2 class="grav-word" aria-label="Let's talk."><span class="gw-row"><span class="fit" aria-hidden="true"><span class="gl">L</span><span class="gl">e</span><span class="gl">t</span><span class="gl">'</span><span class="gl">s</span></span></span><span class="gw-row gw-row--accent"><span class="fit" aria-hidden="true"><span class="gl">t</span><span class="gl">a</span><span class="gl">l</span><span class="gl">k</span><span class="gl">.</span></span></span></h2>
@@ -294,20 +309,20 @@
     <div class="contact-grid">
       <p class="contact-sub" data-reveal>Open to conversations about internships, projects, or what to do with a CS degree in general.</p>
       <div class="contact-mail" data-reveal>
-        <a class="mail magnetic" href="mailto:kailashsg77@gmail.com" data-cursor="Write ✉">kailashsg77@gmail.com</a>
+        <a class="mail magnetic" href="mailto:kailashsg77@gmail.com">kailashsg77@gmail.com</a>
         <button class="copy" type="button" data-copy="kailashsg77@gmail.com"><span class="copy-label">Copy email</span></button>
       </div>
       <ul class="socials" aria-label="Elsewhere" data-reveal>
-        <li><a href="https://www.linkedin.com/in/kailash-s-805142388/" target="_blank" rel="noopener">LinkedIn <span aria-hidden="true">↗</span></a></li>
-        <li><a href="https://github.com/kailashs77" target="_blank" rel="noopener">GitHub <span aria-hidden="true">↗</span></a></li>
-        <li><a href="https://codeforces.com/profile/Kailash77" target="_blank" rel="noopener">Codeforces <span aria-hidden="true">↗</span></a></li>
-        <li><a href="https://www.codechef.com/users/quiver_rats_54" target="_blank" rel="noopener">CodeChef <span aria-hidden="true">↗</span></a></li>
+        <li><a class="u-link" href="https://www.linkedin.com/in/kailash-s-805142388/" target="_blank" rel="noopener">LinkedIn <span aria-hidden="true">↗</span></a></li>
+        <li><a class="u-link" href="https://github.com/kailashs77" target="_blank" rel="noopener">GitHub <span aria-hidden="true">↗</span></a></li>
+        <li><a class="u-link" href="https://codeforces.com/profile/Kailash77" target="_blank" rel="noopener">Codeforces <span aria-hidden="true">↗</span></a></li>
+        <li><a class="u-link" href="https://www.codechef.com/users/quiver_rats_54" target="_blank" rel="noopener">CodeChef <span aria-hidden="true">↗</span></a></li>
       </ul>
     </div>
   </div>
   <footer class="foot wrap">
     <span>© <span id="year">2026</span> Kailash S — built while figuring it out.</span>
-    <a href="#top">Back to orbit ↑</a>
+    <a href="#top" class="to-top"><span class="roll" data-roll>Back to orbit</span> <span aria-hidden="true">↑</span></a>
   </footer>
 </section>
 

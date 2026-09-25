@@ -1,10 +1,15 @@
-/* Skill marquee: two rows drifting in opposite directions, speeding up with scroll velocity. */
+/* Skill marquee: two rows drifting in opposite directions, speeding up with scroll velocity
+   and easing almost to a stop under a mouse so the words can be read. */
 
 export function initMarquee({ reduce, lenis }) {
   const stripe = document.querySelector('.stripe');
   if (!stripe || reduce) return;
   const tracks = [...stripe.querySelectorAll('.mq-track')].map((el) => ({ el, dir: Number(el.dataset.dir) || 1, x: 0, w: 0 }));
   const BASE_SPEED = 60; // px per second
+  let hover = 1;
+  let hoverTarget = 1;
+  stripe.addEventListener('pointerenter', (e) => { if (e.pointerType === 'mouse') hoverTarget = 0.18; });
+  stripe.addEventListener('pointerleave', () => { hoverTarget = 1; });
 
   const fill = () => {
     tracks.forEach((t) => {
@@ -28,8 +33,9 @@ export function initMarquee({ reduce, lenis }) {
     const dt = last ? Math.min((now - last) / 1000, 0.05) : 0;
     last = now;
     const boost = 1 + Math.min(Math.abs(lenis ? lenis.velocity : 0) * 0.15, 6);
+    hover += (hoverTarget - hover) * 0.06;
     for (const t of tracks) {
-      t.x -= BASE_SPEED * boost * t.dir * dt;
+      t.x -= BASE_SPEED * boost * hover * t.dir * dt;
       if (t.x <= -t.w) t.x += t.w;
       else if (t.x > 0) t.x -= t.w;
       t.el.style.transform = `translate3d(${t.x.toFixed(2)}px, 0, 0)`;

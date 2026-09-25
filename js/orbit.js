@@ -38,6 +38,7 @@ export function initOrbit({ reduce, fine }) {
   let tilt = TILT; let tiltTarget = TILT;
   let squash = 1; let squashTarget = 1;
   let speed = 1; let speedTarget = 1;
+  let spread = 1; let boost = 1; // driven by the intro: orbits spin out from the planet
   let ix = 0; let iy = 0; let ixTarget = 0; let iyTarget = 0;
   let running = false; let visible = true; let paused = false; let last = 0;
 
@@ -73,23 +74,25 @@ export function initOrbit({ reduce, fine }) {
     const s = Math.sin(rad);
 
     radii.forEach((r, i) => {
-      const b = r.b * squash;
+      const a = r.a * spread;
+      const b = r.b * squash * spread;
       const e = backEls[i];
       e.setAttribute('cx', cx);
       e.setAttribute('cy', cy);
-      e.setAttribute('rx', r.a);
+      e.setAttribute('rx', a);
       e.setAttribute('ry', b);
       e.setAttribute('transform', `rotate(${tilt.toFixed(3)} ${cx} ${cy})`);
       // the near half of the ring, drawn above the planet
-      frontEls[i].setAttribute('d', `M${cx + r.a * c} ${cy + r.a * s} A${r.a} ${b} ${tilt.toFixed(3)} 0 1 ${cx - r.a * c} ${cy - r.a * s}`);
+      frontEls[i].setAttribute('d', `M${cx + a * c} ${cy + a * s} A${a} ${b} ${tilt.toFixed(3)} 0 1 ${cx - a * c} ${cy - a * s}`);
     });
 
     for (const o of bodies) {
       const r = radii[o.orbit];
       if (!r) continue;
-      o.theta += ORBITS[o.orbit].speed * dt * speed;
-      const lx = r.a * Math.cos(o.theta);
-      const ly = r.b * squash * Math.sin(o.theta);
+      o.theta += ORBITS[o.orbit].speed * dt * speed * boost;
+      const a = r.a * spread;
+      const lx = a * Math.cos(o.theta);
+      const ly = r.b * squash * spread * Math.sin(o.theta);
       const x = cx + lx * c - ly * s;
       const y = cy + lx * s + ly * c;
       const depth = Math.sin(o.theta); // -1 far side … 1 near side
@@ -103,7 +106,7 @@ export function initOrbit({ reduce, fine }) {
       }
       // labels sit on the outer side of each body, with a dead zone so they don't flicker
       const rel = x - cx;
-      const side = rel > r.a * 0.2 ? 'l' : rel < -r.a * 0.2 ? 'r' : o.side || (rel > 0 ? 'l' : 'r');
+      const side = rel > a * 0.2 ? 'l' : rel < -a * 0.2 ? 'r' : o.side || (rel > 0 ? 'l' : 'r');
       if (side !== o.side) { o.side = side; o.el.dataset.side = side; }
     }
 
@@ -143,12 +146,17 @@ export function initOrbit({ reduce, fine }) {
     }, { passive: true });
   }
 
-  // Hovering or focusing a body slows the whole system so it can be read and clicked.
+  // Hovering or focusing a body lights its orbit and slows the system so it can be read and clicked.
+  const light = (index) => {
+    [back, front].forEach((svg) => svg.classList.toggle('has-lit', index !== null));
+    backEls.forEach((e, k) => e.classList.toggle('is-lit', k === index));
+    frontEls.forEach((e, k) => e.classList.toggle('is-lit', k === index));
+  };
   for (const o of bodies) {
-    o.el.addEventListener('pointerenter', () => { speedTarget = 0.05; });
-    o.el.addEventListener('pointerleave', () => { speedTarget = 1; });
-    o.el.addEventListener('focus', () => { speedTarget = 0; speed = 0; });
-    o.el.addEventListener('blur', () => { speedTarget = 1; });
+    o.el.addEventListener('pointerenter', () => { speedTarget = 0.05; light(o.orbit); });
+    o.el.addEventListener('pointerleave', () => { speedTarget = 1; light(null); });
+    o.el.addEventListener('focus', () => { speedTarget = 0; speed = 0; light(o.orbit); });
+    o.el.addEventListener('blur', () => { speedTarget = 1; light(null); });
   }
 
   measure();
@@ -160,6 +168,11 @@ export function initOrbit({ reduce, fine }) {
       if (value === paused) return;
       paused = value;
       paused ? stop() : start();
+    },
+    tune(values) {
+      if ('spread' in values) spread = values.spread;
+      if ('boost' in values) boost = values.boost;
+      if (!running) render(0);
     },
   };
 }

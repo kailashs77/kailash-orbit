@@ -1,8 +1,9 @@
 import { initOrbit } from './orbit.js';
-import { initCursor, initMagnetic } from './cursor.js';
+import { initCursor } from './cursor.js';
 import { initScenes } from './scenes.js';
 import { initGravity } from './gravity.js';
 import { initMarquee } from './marquee.js';
+import { initRolls, initButtons, initMagnetic, initRows, initTilt } from './interactions.js';
 import { fitText, initHeader, initMenu, initAnchors, initClock, initCopy, initRating } from './ui.js';
 
 const root = document.documentElement;
@@ -20,7 +21,7 @@ let lenis = null;
 if (canAnimate) {
   gsap.registerPlugin(ScrollTrigger);
   if (Lenis) {
-    lenis = new Lenis({ lerp: 0.1 });
+    lenis = new Lenis({ lerp: 0.09 });
     lenis.on('scroll', ScrollTrigger.update);
     gsap.ticker.add((time) => lenis.raf(time * 1000));
     gsap.ticker.lagSmoothing(0);
@@ -33,6 +34,7 @@ const fitAll = () => {
 };
 fitAll();
 
+initRolls();
 const header = initHeader(lenis);
 initMenu(lenis);
 initAnchors(lenis, reduce);
@@ -44,12 +46,16 @@ initMarquee({ reduce, lenis });
 initGravity({ reduce, fine });
 if (fine && !reduce) {
   initCursor();
+  initButtons();
   initMagnetic();
+  initRows();
+  initTilt();
 }
 
+let scenes = null;
 if (canAnimate) {
   try {
-    initScenes({ header, orbit, intro: !lateStart });
+    scenes = initScenes({ header, orbit, intro: !lateStart });
   } catch (err) {
     root.classList.remove('motion');
     console.error(err);
@@ -62,7 +68,18 @@ const remeasure = () => {
   orbit.measure();
   if (canAnimate) ScrollTrigger.refresh();
 };
-// Web fonts change text metrics, so refit once they arrive.
+
+// Start the entrance once the fonts and portrait are ready (so nothing reflows mid-animation),
+// but never wait longer than 0.9s for them.
+const portrait = document.querySelector('#planet img');
+const assetsReady = Promise.all([
+  document.fonts ? document.fonts.ready : null,
+  portrait && portrait.decode ? portrait.decode().catch(() => {}) : null,
+]);
+Promise.race([assetsReady, new Promise((resolve) => setTimeout(resolve, 900))]).then(() => {
+  remeasure();
+  if (scenes) scenes.play();
+});
 if (document.fonts) document.fonts.ready.then(remeasure);
 
 let lastWidth = innerWidth;
