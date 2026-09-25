@@ -17,6 +17,16 @@
 <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Archivo:ital,wdth,wght@0,62..125,100..900;1,62..125,100..900&amp;family=JetBrains+Mono:wght@400;500&amp;display=swap" rel="stylesheet">
 <link rel="preload" as="image" href="assets/portrait.jpg">
+<!-- fetch the whole module graph in parallel instead of discovering it one import at a time -->
+<link rel="modulepreload" href="js/main.js">
+<link rel="modulepreload" href="js/motion.js">
+<link rel="modulepreload" href="js/orbit.js">
+<link rel="modulepreload" href="js/scenes.js">
+<link rel="modulepreload" href="js/interactions.js">
+<link rel="modulepreload" href="js/ui.js">
+<link rel="modulepreload" href="js/cursor.js">
+<link rel="modulepreload" href="js/gravity.js">
+<link rel="modulepreload" href="js/marquee.js">
 <link rel="stylesheet" href="css/style.css">
 <script>
   // Motion is opt-in: hidden entrance states only apply while this class is set.
