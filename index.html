@@ -12,10 +12,19 @@
 <meta property="og:url" content="https://kailashs77.github.io/kailash-orbit/">
 <meta property="og:image" content="https://kailashs77.github.io/kailash-orbit/assets/portrait.jpg">
 <link rel="icon" href="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%2064%2064'%3E%3Crect%20width='64'%20height='64'%20rx='14'%20fill='%230A0A0B'/%3E%3Cellipse%20cx='32'%20cy='33'%20rx='25'%20ry='8'%20fill='none'%20stroke='%23ECE8E1'%20stroke-width='2.5'%20transform='rotate(-14%2032%2033)'/%3E%3Ccircle%20cx='32'%20cy='32'%20r='12'%20fill='%23FFA629'/%3E%3C/svg%3E">
+<script>
+  // Motion is opt-in: hidden entrance states only apply while this class is set.
+  // If the animation scripts are slow to arrive, show the page as-is instead of waiting.
+  // (Kept above the stylesheets: an inline script placed after them would wait for them to load.)
+  (function (d) {
+    if (!matchMedia('(prefers-reduced-motion: reduce)').matches) d.classList.add('motion');
+    setTimeout(function () { if (!d.classList.contains('motion-ready')) d.classList.remove('motion'); }, 1800);
+  })(document.documentElement);
+</script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Archivo:ital,wdth,wght@0,62..125,100..900;1,62..125,100..900&amp;family=JetBrains+Mono:wght@400;500&amp;display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
 <link rel="preload" as="image" href="assets/portrait.jpg">
 <!-- fetch the whole module graph in parallel instead of discovering it one import at a time -->
 <link rel="modulepreload" href="js/main.js">
@@ -27,18 +36,10 @@
 <link rel="modulepreload" href="js/cursor.js">
 <link rel="modulepreload" href="js/gravity.js">
 <link rel="modulepreload" href="js/marquee.js">
-<link rel="stylesheet" href="css/style.css">
-<script>
-  // Motion is opt-in: hidden entrance states only apply while this class is set.
-  // If the animation scripts are slow to arrive, show the page as-is instead of waiting.
-  (function (d) {
-    if (!matchMedia('(prefers-reduced-motion: reduce)').matches) d.classList.add('motion');
-    setTimeout(function () { if (!d.classList.contains('motion-ready')) d.classList.remove('motion'); }, 1800);
-  })(document.documentElement);
-</script>
-<script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js" defer></script>
-<script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/ScrollTrigger.min.js" defer></script>
-<script src="https://cdn.jsdelivr.net/npm/lenis@1.1.13/dist/lenis.min.js" defer></script>
+<!-- animation libraries are served from this repo (see vendor/README.md) -->
+<script src="vendor/gsap.min.js" defer></script>
+<script src="vendor/ScrollTrigger.min.js" defer></script>
+<script src="vendor/lenis.min.js" defer></script>
 <script type="module" src="js/main.js"></script>
 </head>
 <body>
